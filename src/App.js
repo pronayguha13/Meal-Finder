@@ -52,7 +52,7 @@ function App() {
           </button>
         </div>
 
-        <div id="result-heading">
+        <div>
           {meal.trim().length ? (
             <h3>Search result for : "{meal}"</h3>
           ) : (
@@ -60,14 +60,19 @@ function App() {
           )}
         </div>
         <div id="meals" className="meals">
-          {mealDetails.map((meals) => (
-            <div class="meal">
-              <img src={meals.strMealThumb} alt={meals.strMeal} />
-              <div class="meal-info" data-mealID="{meals.idMeal}">
-                <h3>${meals.strMeal}</h3>
+          {mealDetails === null ? (
+            <h3>No meal Found</h3>
+          ) : (
+            mealDetails.map((meals) => (
+              <div className="meal" key={meals.idMeal}>
+                <img src={meals.strMealThumb} alt={meals.strMeal} />
+                <div className="meal-info">
+                  {/* data-mealID="{meals.idMeal}" */}
+                  <h3>${meals.strMeal}</h3>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
         <div id="single-meal"></div>
       </div>
