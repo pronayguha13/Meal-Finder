@@ -2,12 +2,12 @@ import React from "react";
 import "./App.css";
 import { useState } from "react";
 import { useEffect } from "react";
+import Meal from "./Meals";
+import MealForm from "./MealFinderForm";
 
 function App() {
   const [meal, setMeal] = useState("");
   const [mealDetails, setMealDetails] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [error, SetError] = useState(null);
 
   useEffect(() => {
     getMeal();
@@ -20,37 +20,21 @@ function App() {
     if (term.length) {
       fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
         .then((res) => res.json())
-        .then((data) => setMealDetails(data.meals))
-        .catch((err) => SetError(err));
+        .then((data) => setMealDetails(data.meals));
     }
   };
 
   const getRandomMeal = () => {
     fetch("https://www.themealdb.com/api/json/v1/1/random.php")
       .then((res) => res.json())
-      .then((data) => setMealDetails(data.meals))
-      .catch((err) => SetError(err));
+      .then((data) => setMealDetails(data.meals));
   };
 
   return (
     <div className="App">
       <div className="container">
         <h1>Meal Finder</h1>
-        <div className="flex">
-          <form className="flex" id="submit">
-            <input
-              type="text"
-              onChange={(e) => setMeal(e.target.value)}
-              placeholder="Search for meals or keywords"
-            />
-            <button className="search-btn" type="submit">
-              <i className="fas fa-search"></i>
-            </button>
-          </form>
-          <button className="random-btn" onClick={getRandomMeal}>
-            <i className="fas fa-random"></i>
-          </button>
-        </div>
+        <MealForm getRandomMeal={getRandomMeal} setMeal={setMeal} />
 
         <div>
           {meal.trim().length ? (
@@ -63,15 +47,7 @@ function App() {
           {mealDetails === null ? (
             <h3>No meal Found</h3>
           ) : (
-            mealDetails.map((meals) => (
-              <div className="meal" key={meals.idMeal}>
-                <img src={meals.strMealThumb} alt={meals.strMeal} />
-                <div className="meal-info">
-                  {/* data-mealID="{meals.idMeal}" */}
-                  <h3>${meals.strMeal}</h3>
-                </div>
-              </div>
-            ))
+            mealDetails.map((meals) => <Meal meals={meals} />)
           )}
         </div>
         <div id="single-meal"></div>
